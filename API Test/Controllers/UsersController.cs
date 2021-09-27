@@ -1,5 +1,7 @@
 ﻿using API_Test.Data;
 using API_Test.Models;
+using API_Test.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,11 +16,12 @@ namespace API_Test.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-
+        Password password;
         private readonly TruckContext _context;
         public UsersController(TruckContext context)
         {
             _context = context;
+            password = new Password();
         }
 
 
@@ -30,12 +33,21 @@ namespace API_Test.Controllers
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("{email}")]
-        public ApplicationUser Get(string email)
+        [HttpGet("{email}/{pass}")]
+        public bool Get(string email,string pass)
         {
-            return _context.ApplicationUsers.First(e => e.Email == email);
-        }
+            var user = _context.ApplicationUsers.First(e => e.Email == email);
 
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result  = password.ValidatePassword(user, user.PasswordHash,pass);
+
+            return result;
+        }
+       
         // POST api/<UsersController>
         [HttpPost]
         public void Post([FromBody] string value)
