@@ -18,10 +18,14 @@ namespace API_Test.Controllers
     {
         Password password;
         private readonly TruckContext _context;
+        public readonly PasswordHasher<ApplicationUser> _passwordHasher;
+
         public UsersController(TruckContext context)
         {
             _context = context;
             password = new Password();
+            _passwordHasher = new PasswordHasher<ApplicationUser>();
+
         }
 
 
@@ -47,11 +51,49 @@ namespace API_Test.Controllers
 
             return result;
         }
-       
+
+
+        [HttpGet("{email}")]
+        public ApplicationUser GetUser(string email)
+        {
+            var user = _context.ApplicationUsers.FirstOrDefault(e => e.Email == email);
+
+            if (user == null)
+            {
+                return null ;
+            }
+
+            return user;
+        }
+
+
+        // POST api/<UsersController>
+        /*[HttpPost]
+        public async Task<ActionResult<ApplicationUser>> Post(ApplicationUser user)
+        {
+
+            _context.ApplicationUsers.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetTransporter", new { id = user.Id }, user)
+
+        }*/
+
         // POST api/<UsersController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task Post(ApplicationUser applicationUser)
         {
+
+            Guid guid = Guid.NewGuid();
+            applicationUser.Id = guid.ToString();
+
+           // var hashedPassword = _passwordHasher.HashPassword(applicationUser, applicationUser.password);
+            applicationUser.SecurityStamp = Guid.NewGuid().ToString();
+            //applicationUser.PasswordHash = hashedPassword;
+            
+            _context.ApplicationUsers.Add(applicationUser);
+            await _context.SaveChangesAsync();
+
         }
 
         // PUT api/<UsersController>/5
