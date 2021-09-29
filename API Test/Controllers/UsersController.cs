@@ -67,19 +67,7 @@ namespace API_Test.Controllers
         }
 
 
-        // POST api/<UsersController>
-        /*[HttpPost]
-        public async Task<ActionResult<ApplicationUser>> Post(ApplicationUser user)
-        {
-
-            _context.ApplicationUsers.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTransporter", new { id = user.Id }, user)
-
-        }*/
-
-        // POST api/<UsersController>
+        
         [HttpPost]
         public async Task Post(ApplicationUser applicationUser)
         {
@@ -92,6 +80,16 @@ namespace API_Test.Controllers
             //applicationUser.PasswordHash = hashedPassword;
             
             _context.ApplicationUsers.Add(applicationUser);
+
+            IdentityUserRole<string> identityUserRole = new IdentityUserRole<string>();
+
+            var Role = _context.Roles.FirstOrDefault(r=> r.Name == applicationUser.Role);
+            var RoleId = Role.Id;
+
+            identityUserRole.RoleId = RoleId;
+            identityUserRole.UserId = guid.ToString();
+            _context.UserRoles.Add(identityUserRole);
+                     
             await _context.SaveChangesAsync();
 
         }

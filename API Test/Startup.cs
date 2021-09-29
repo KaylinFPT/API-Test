@@ -2,6 +2,7 @@ using API_Test.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,13 @@ namespace API_Test
             services.AddDbContext<TruckContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                options.SignIn.RequireConfirmedAccount = true;
+                // options.User.RequireUniqueEmail = false;
+            })
+         .AddEntityFrameworkStores<TruckContext>()
+         .AddDefaultTokenProviders();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
