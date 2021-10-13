@@ -20,7 +20,9 @@ namespace API_Test.Data
 
         public DbSet<Transporter> Transporter { get; set; }
 
-      
+        public DbSet<Exporter> Exporter { get; set; }
+
+
     }
 
 
