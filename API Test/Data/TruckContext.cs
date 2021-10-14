@@ -22,6 +22,12 @@ namespace API_Test.Data
 
         public DbSet<Exporter> Exporter { get; set; }
 
+        public DbSet<Booking> Booking { get; set; }
+
+        public DbSet<Warehouse> Warehouse { get; set; }
+
+        public DbSet<API_Test.Models.Slots> Slots { get; set; }
+
 
     }
 
