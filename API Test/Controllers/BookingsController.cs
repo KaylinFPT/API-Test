@@ -42,6 +42,20 @@ namespace API_Test.Controllers
             return booking;
         }
 
+        // GET: api/Bookings/5
+        [HttpGet("GetByRef/{Bref}")]
+        public async Task<ActionResult<Booking>> GetBookingByRef(string Bref)
+        {
+            var booking = await _context.Booking.FirstOrDefaultAsync(r => r.BookingRef == Bref);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            return booking;
+        }
+
         // PUT: api/Bookings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

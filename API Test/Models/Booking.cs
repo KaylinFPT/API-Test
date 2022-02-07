@@ -68,6 +68,8 @@ namespace API_Test.Models
 
         public string UserWarehouse { get; set; }
 
+        public int NumOfPlts { get; set; }
+
         public Booking()
         {
             this.CreatedDateUtc = DateTime.Now;

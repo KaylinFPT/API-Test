@@ -28,6 +28,9 @@ namespace API_Test.Data
 
         public DbSet<API_Test.Models.Slots> Slots { get; set; }
 
+        public DbSet<MarketTypes> MarketTypes { get; set; }
+
+
 
     }
 

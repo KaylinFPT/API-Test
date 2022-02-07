@@ -33,7 +33,18 @@ namespace API_Test.Controllers
         [HttpGet]
         public IEnumerable<ApplicationUser> Get()
         {
-            return _context.ApplicationUsers.ToList();
+            var userList = _context.ApplicationUsers.ToList();
+            var userRole = _context.UserRoles.ToList();
+            var roles = _context.Roles.ToList();
+            foreach (var user in userList)
+            {
+                var roleId = userRole.FirstOrDefault(u => u.UserId == user.Id).RoleId;
+                user.Role = roles.FirstOrDefault(u => u.Id == roleId).Name;
+
+            }
+
+            return userList;
+            //return _context.ApplicationUsers.ToList();
         }
 
         // GET api/<UsersController>/5
@@ -57,6 +68,10 @@ namespace API_Test.Controllers
         public ApplicationUser GetUser(string email)
         {
             var user = _context.ApplicationUsers.FirstOrDefault(e => e.Email == email);
+            var userRole = _context.UserRoles.ToList();
+            var roles = _context.Roles.ToList();
+            var roleId = userRole.FirstOrDefault(u => u.UserId == user.Id).RoleId;
+            user.Role = roles.FirstOrDefault(u => u.Id == roleId).Name;
 
             if (user == null)
             {
@@ -64,8 +79,9 @@ namespace API_Test.Controllers
             }
 
             return user;
+        
         }
-
+      
 
         
         [HttpPost]
